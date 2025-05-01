@@ -3,6 +3,7 @@ import AuthRepository from "../repository/auth.repository";
 import { ISignup } from "../interfaces/dtos/auth/ISignup";
 import passwordCrypt from "../utils/generatePwdCrypt";
 import { ISignin } from "../interfaces/dtos/auth/ISignin";
+import { Request } from "express";
 
 export default class AuthService {
     private auth_repository: AuthRepository;
@@ -40,7 +41,7 @@ export default class AuthService {
             const newAuth = {
                 email: signin.email.toLowerCase(),
                 password: signin.password
-            }
+            };
 
             const signinService = await this.auth_repository.signin(newAuth);
             if (!signinService) {
@@ -48,12 +49,36 @@ export default class AuthService {
                 return signinService;
             }
             if (signinService.email !== newAuth.email || signinService.password_hash !== signin.password) {
-                console.error('🚨Usuário ou Senha inválido! teste');
+                console.error('🚨 Usuário ou Senha inválido!');
             }
-            return signinService;
-        } catch (error:any) {
+
+            // Retorna o usuário autenticado
+            return { data: signinService };
+        } catch (error: any) {
             console.error('❌:' + error);
             return error;
         }
     }
+
+    async saveRefreshToken(authId: number, refreshToken: string, userAgent: string, rawIp: string, proxyIp: string) {
+        try {
+            const refreshData = await this.auth_repository.saveRefreshToken(authId, refreshToken, userAgent, rawIp, proxyIp);
+            return refreshData;
+        } catch (error) {
+            console.error('❌: ' + error);
+            return error;
+        }
+    }
+
+    async logout(refreshToken:string, authId:number):Promise<IResponseAuth> {
+        try {
+            const result = await this.auth_repository.logout(refreshToken, authId);
+            return result;
+        }catch(error:any) {
+            console.error('❌: ' + error);
+            return error;
+        }
+    }
+
+
 }

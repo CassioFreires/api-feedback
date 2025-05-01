@@ -16,4 +16,10 @@ authRouter.post('/signup', async function (req, res) {
 authRouter.post('/signin', async function (req, res) {
     await auth_controller.signin(req, res);
 });
+authRouter.post('/refresh', async function (req, res) {
+    await auth_controller.refresh(req, res);
+});
+authRouter.post('/logout', async function (req, res) {
+    await auth_controller.logout(req, res);
+});
 exports.default = authRouter;

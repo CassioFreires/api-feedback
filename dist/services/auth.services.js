@@ -44,12 +44,33 @@ class AuthService {
                 return signinService;
             }
             if (signinService.email !== newAuth.email || signinService.password_hash !== signin.password) {
-                console.error('🚨Usuário ou Senha inválido! teste');
+                console.error('🚨 Usuário ou Senha inválido!');
             }
-            return signinService;
+            // Retorna o usuário autenticado
+            return { data: signinService };
         }
         catch (error) {
             console.error('❌:' + error);
+            return error;
+        }
+    }
+    async saveRefreshToken(authId, refreshToken, userAgent, rawIp, proxyIp) {
+        try {
+            const refreshData = await this.auth_repository.saveRefreshToken(authId, refreshToken, userAgent, rawIp, proxyIp);
+            return refreshData;
+        }
+        catch (error) {
+            console.error('❌: ' + error);
+            return error;
+        }
+    }
+    async logout(refreshToken, authId) {
+        try {
+            const result = await this.auth_repository.logout(refreshToken, authId);
+            return result;
+        }
+        catch (error) {
+            console.error('❌: ' + error);
             return error;
         }
     }
