@@ -1,4 +1,4 @@
-export interface IResponseSignup {
+export interface IResponseAuth {
     message?: string,
     status?:number,
     data?: {} | [] | undefined;

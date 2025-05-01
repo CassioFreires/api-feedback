@@ -19,11 +19,38 @@ class AuthService {
                 role: signup.role?.toLocaleLowerCase()
             };
             const dataSignup = await this.auth_repository.signup(signupFormated);
+            if (dataSignup) {
+                if (dataSignup.code == 'ER_DUP_ENTRY' || dataSignup.sqlState == 'ER_DUP_ENTRY') {
+                    console.error('❌: E-mail cadastrado, tente outro!');
+                    return { message: "❌ E-mail cadastrado, tente outro!", status: 404 };
+                }
+            }
             return dataSignup;
         }
         catch (error) {
-            console.log('❌ Erro interno no servidor');
+            console.error('❌ Erro interno ao tentar usuario no banco de dados');
             throw error;
+        }
+    }
+    async signin(signin) {
+        try {
+            const newAuth = {
+                email: signin.email.toLowerCase(),
+                password: signin.password
+            };
+            const signinService = await this.auth_repository.signin(newAuth);
+            if (!signinService) {
+                console.error('❌ Error: Usuário ou inválido!');
+                return signinService;
+            }
+            if (signinService.email !== newAuth.email || signinService.password_hash !== signin.password) {
+                console.error('🚨Usuário ou Senha inválido! teste');
+            }
+            return signinService;
+        }
+        catch (error) {
+            console.error('❌:' + error);
+            return error;
         }
     }
 }

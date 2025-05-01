@@ -16,8 +16,16 @@ class AuthRepository {
             return dataSignup;
         }
         catch (error) {
-            console.error('❌ Erro interno ao tentar usuario no banco de dados');
-            throw error;
+            return error;
+        }
+    }
+    async signin(signin) {
+        try {
+            const auth = await (0, db_config_1.default)('auth').select('*').where({ email: signin.email, password_hash: signin.password }).first();
+            return auth;
+        }
+        catch (error) {
+            return error;
         }
     }
 }

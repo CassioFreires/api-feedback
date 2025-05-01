@@ -24,7 +24,6 @@ class SignupDto {
         }
     }
     getData() {
-        this.validate();
         return {
             email: this.email,
             password_hash: this.password_hash,

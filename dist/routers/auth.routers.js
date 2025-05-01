@@ -13,4 +13,7 @@ const auth_controller = new auth_controllers_1.default();
 authRouter.post('/signup', async function (req, res) {
     await auth_controller.signup(req, res);
 });
+authRouter.post('/signin', async function (req, res) {
+    await auth_controller.signin(req, res);
+});
 exports.default = authRouter;
