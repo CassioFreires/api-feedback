@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken';
 
-export const generateTokenAccess = (idUser: string) => {
+export const generateTokenAccess = (data:{id:number, email:string, name:string, role_name:string, description:string}) => {
     try {
-        const token = jwt.sign({ id: idUser }, String(process.env.TOKEN_PRIVATE_KEY), { algorithm: "HS256", expiresIn: 60 * 60 });
+        const token = jwt.sign(data, String(process.env.TOKEN_PRIVATE_KEY), { algorithm: "HS256", expiresIn: 60 * 60 });
         return token;
     } catch (error) {
         console.error('❌: ' + error);
@@ -11,9 +11,9 @@ export const generateTokenAccess = (idUser: string) => {
 }
 
 
-export const generateRefreshTokenAccess = (idUser: string) => {
+export const generateRefreshTokenAccess = (data:{id:number, email:string, name:string, role_name:string, description:string}) => {
     try {
-        const refreshToken = jwt.sign({ id: idUser }, String(process.env.TOKEN_PRIVATE_KEY_REFRESH), { algorithm: 'HS256', expiresIn: (7 * 24 * 60 * 60) });
+        const refreshToken = jwt.sign(data, String(process.env.TOKEN_PRIVATE_KEY_REFRESH), { algorithm: 'HS256', expiresIn: (7 * 24 * 60 * 60) });
         return refreshToken;
     } catch (error) {
         console.error('❌: ' + error);

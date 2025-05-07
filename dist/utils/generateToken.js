@@ -5,9 +5,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateRefreshTokenAccess = exports.generateTokenAccess = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const generateTokenAccess = (idUser) => {
+const generateTokenAccess = (data) => {
     try {
-        const token = jsonwebtoken_1.default.sign({ id: idUser }, String(process.env.TOKEN_PRIVATE_KEY), { algorithm: "HS256", expiresIn: 60 * 60 });
+        const token = jsonwebtoken_1.default.sign(data, String(process.env.TOKEN_PRIVATE_KEY), { algorithm: "HS256", expiresIn: 60 * 60 });
         return token;
     }
     catch (error) {
@@ -16,9 +16,9 @@ const generateTokenAccess = (idUser) => {
     }
 };
 exports.generateTokenAccess = generateTokenAccess;
-const generateRefreshTokenAccess = (idUser) => {
+const generateRefreshTokenAccess = (data) => {
     try {
-        const refreshToken = jsonwebtoken_1.default.sign({ id: idUser }, String(process.env.TOKEN_PRIVATE_KEY_REFRESH), { algorithm: 'HS256', expiresIn: (7 * 24 * 60 * 60) });
+        const refreshToken = jsonwebtoken_1.default.sign(data, String(process.env.TOKEN_PRIVATE_KEY_REFRESH), { algorithm: 'HS256', expiresIn: (7 * 24 * 60 * 60) });
         return refreshToken;
     }
     catch (error) {

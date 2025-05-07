@@ -11,8 +11,10 @@ dotenv_1.default.config();
 const db_config_1 = require("./config/db.config");
 // rotas
 const auth_routers_1 = __importDefault(require("./routers/auth.routers"));
+const users_routers_1 = __importDefault(require("./routers/users.routers"));
 app.use(express_1.default.json());
 app.use('/auth', auth_routers_1.default);
+app.use('/users', users_routers_1.default);
 (0, db_config_1.testarConexao)()
     .then(() => {
     app.listen(process.env.HTTP_PORT, () => {
