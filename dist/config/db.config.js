@@ -1,6 +1,7 @@
 import knex from 'knex';
 import chalk from 'chalk';
 const db = knex({
+    // mysql://root:********@yamanote.proxy.rlwy.net:22208/railway
     client: process.env.MYSQL_NAME || 'mysql2',
     connection: {
         host: process.env.MYSQL_LOCALHOST || '127.0.0.1',
