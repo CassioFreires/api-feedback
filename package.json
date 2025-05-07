@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
-    "watch:build": "tsc --watch",
-    "watch:start": "nodemon",
-    "dev": "concurrently \"npm:watch:build\" \"npm:watch:start\""
-  },
+  "build": "tsc",
+  "watch:build": "tsc --watch",
+  "watch:start": "nodemon",
+  "dev": "concurrently \"npm:watch:build\" \"npm:watch:start\"",
+  "start": "node dist/server.js"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
