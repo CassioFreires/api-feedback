@@ -1,12 +1,12 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/server.js",
   "scripts": {
   "build": "tsc",
   "watch:build": "tsc --watch",
-  "watch:start": "nodemon",
-  "dev": "concurrently \"npm:watch:build\" \"npm:watch:start\"",
+  "watch:start": "node dist/server.js",
+  "dev": "concurrently \"tsc --watch\" \"nodemon ./dist/server.js\"",
   "start": "node dist/server.js"
 },
   "keywords": [],
