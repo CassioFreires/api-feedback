@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { Request, Response } from 'express';
 
 // Controllers
-import AuthController from '../controllers/auth.controllers';
+import AuthController from '../controllers/auth.controllers.js';
 
 // Variáveis
 const authRouter = Router();

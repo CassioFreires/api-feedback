@@ -1,5 +1,5 @@
-import IUsersResponse from "../interfaces/dtos/users/IUsersResponse";
-import db from "../config/db.config";
+import IUsersResponse from "../interfaces/dtos/users/IUsersResponse.js";
+import db from "../config/db.config.js";
 
 
 export default class UserRepository {

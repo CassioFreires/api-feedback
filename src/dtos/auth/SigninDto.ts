@@ -1,4 +1,4 @@
-import { ISignin } from "../../interfaces/dtos/auth/ISignin";
+import { ISignin } from "../../interfaces/dtos/auth/ISignin.js";
 
 export class SigninDto implements ISignin {
     constructor(public email: string, public password: string) { }

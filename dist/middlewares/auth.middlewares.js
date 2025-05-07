@@ -1,10 +1,5 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const decodeTokenAuth_1 = __importDefault(require("../utils/decodeTokenAuth"));
-class AuthMiddleware {
+import decodeTokenAuth from '../utils/decodeTokenAuth.js';
+export default class AuthMiddleware {
     async validate(req, res, next) {
         try {
             const { authorization } = req.headers;
@@ -14,7 +9,7 @@ class AuthMiddleware {
             const [bearer, token] = index;
             if (index.length <= 0 || !bearer || !token)
                 return res.status(401).json({ message: '❌ Acesso negado!' });
-            const decode = await (0, decodeTokenAuth_1.default)(token);
+            const decode = await decodeTokenAuth(token);
             req.data = decode;
             next();
         }
@@ -39,4 +34,3 @@ class AuthMiddleware {
         }
     }
 }
-exports.default = AuthMiddleware;

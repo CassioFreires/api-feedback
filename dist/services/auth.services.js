@@ -1,18 +1,14 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const auth_repository_1 = __importDefault(require("../repository/auth.repository"));
-const generatePwdCrypt_1 = __importDefault(require("../utils/generatePwdCrypt"));
-const speakeasy_1 = __importDefault(require("speakeasy"));
-class AuthService {
+import AuthRepository from "../repository/auth.repository.js";
+import passwordCrypt from "../utils/generatePwdCrypt.js";
+import speakeasy from 'speakeasy';
+export default class AuthService {
+    auth_repository;
     constructor() {
-        this.auth_repository = new auth_repository_1.default();
+        this.auth_repository = new AuthRepository();
     }
     async signup(signup) {
         try {
-            const generatePwdCrypt = await (0, generatePwdCrypt_1.default)(signup.password_hash);
+            const generatePwdCrypt = await passwordCrypt(signup.password_hash);
             const signupFormated = {
                 email: signup.email.toLowerCase(),
                 password_hash: generatePwdCrypt,
@@ -95,7 +91,7 @@ class AuthService {
         if (!secret) {
             return { message: '❌ Código 2FA inválido ou expirado!', valid: false };
         }
-        const isEnteredCodeValid = speakeasy_1.default.totp.verify({
+        const isEnteredCodeValid = speakeasy.totp.verify({
             secret,
             encoding: 'base32',
             token: entered_code,
@@ -124,4 +120,3 @@ class AuthService {
         }
     }
 }
-exports.default = AuthService;

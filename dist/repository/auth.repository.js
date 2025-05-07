@@ -1,14 +1,9 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const db_config_1 = __importDefault(require("../config/db.config"));
-const dayjs_1 = __importDefault(require("dayjs"));
-class AuthRepository {
+import db from '../config/db.config.js';
+import dayjs from 'dayjs';
+export default class AuthRepository {
     async signup(signup) {
         try {
-            const dataSignup = await (0, db_config_1.default)('auth').insert({
+            const dataSignup = await db('auth').insert({
                 email: signup.email,
                 password_hash: signup.password_hash,
                 name: signup.name,
@@ -22,7 +17,7 @@ class AuthRepository {
     }
     async signin(signin) {
         try {
-            const auth = await (0, db_config_1.default)('auth as a')
+            const auth = await db('auth as a')
                 .join('roles as r', 'r.id', '=', 'a.role_id')
                 .select('a.id', 'a.email', 'a.name', 'a.last_login', 'a.two_factor_enabled', 'a.is_active', 'a.password_hash', 'r.role_name', 'r.description')
                 .where({ email: signin.email }).first();
@@ -35,7 +30,7 @@ class AuthRepository {
     async saveRefreshToken(authId, refreshToken, userAgent, rawIp, proxyIp) {
         try {
             // Salvar o refresh token na base de dados sem gerá-lo novamente
-            const refreshtoken = await (0, db_config_1.default)('refresh_tokens').insert({
+            const refreshtoken = await db('refresh_tokens').insert({
                 auth_id: authId, // ID do usuário autenticado
                 token: refreshToken, // O mesmo token gerado no controller
                 expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 dias
@@ -52,7 +47,7 @@ class AuthRepository {
     }
     async logout(refreshToken, authId) {
         try {
-            const removeRefreshToken = await (0, db_config_1.default)('refresh_tokens')
+            const removeRefreshToken = await db('refresh_tokens')
                 .where({ auth_id: authId, token: refreshToken })
                 .del();
             if (removeRefreshToken === 0) {
@@ -67,11 +62,11 @@ class AuthRepository {
     }
     async enable2fa(secret, auth_id) {
         try {
-            const expiresAt = (0, dayjs_1.default)().add(30, 'second').toDate();
-            const insertAuth = await (0, db_config_1.default)('auth').where({ id: auth_id }).update({
+            const expiresAt = dayjs().add(30, 'second').toDate();
+            const insertAuth = await db('auth').where({ id: auth_id }).update({
                 two_factor_enabled: true,
             });
-            const insertEmailVerificationCodes = (0, db_config_1.default)('verification_codes_2FA').insert({
+            const insertEmailVerificationCodes = db('verification_codes_2FA').insert({
                 auth_id: auth_id,
                 code: secret,
                 expires_at: expiresAt
@@ -84,7 +79,7 @@ class AuthRepository {
         }
     }
     async verify2fa(auth_id) {
-        const result = await (0, db_config_1.default)('email_verification_codes')
+        const result = await db('email_verification_codes')
             .where({ auth_id })
             .orderBy('id', 'desc')
             .first();
@@ -94,14 +89,14 @@ class AuthRepository {
     }
     async disable2fa(auth_id) {
         try {
-            const user = await (0, db_config_1.default)('auth').where({ id: auth_id }).first();
+            const user = await db('auth').where({ id: auth_id }).first();
             if (!user)
                 return { success: false, reason: 'not_found' };
-            await (0, db_config_1.default)('auth').where({ id: auth_id }).update({ two_factor_enabled: false });
-            const teste = await (0, db_config_1.default)('verification_codes_2FA').select('*').where({ auth_id: auth_id }).first();
+            await db('auth').where({ id: auth_id }).update({ two_factor_enabled: false });
+            const teste = await db('verification_codes_2FA').select('*').where({ auth_id: auth_id }).first();
             if (!teste)
                 return { success: false, reason: 'code_update_failed' };
-            const updatedCode = await (0, db_config_1.default)('verification_codes_2FA')
+            const updatedCode = await db('verification_codes_2FA')
                 .where({ auth_id: auth_id })
                 .update({ code: '' });
             if (!updatedCode)
@@ -114,4 +109,3 @@ class AuthRepository {
         }
     }
 }
-exports.default = AuthRepository;

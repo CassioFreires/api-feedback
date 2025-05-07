@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
 import jwt from 'jsonwebtoken';
-import AuthService from "../services/auth.services";
-import { SignupDto } from "../dtos/auth/SignupDto";
-import { IResponseAuth } from "../interfaces/dtos/auth/IResponseAuth";
-import { SigninDto } from "../dtos/auth/SigninDto";
+import AuthService from "../services/auth.services.js";
+import { SignupDto } from "../dtos/auth/SignupDto.js";
+import { IResponseAuth } from "../interfaces/dtos/auth/IResponseAuth.js";
+import { SigninDto } from "../dtos/auth/SigninDto.js";
 import chalk from "chalk";
-import { generateRefreshTokenAccess, generateTokenAccess } from "../utils/generateToken";
-import { generateCodeTotp } from "../utils/generateCodeTotp";
-import comparePwdCrypt from "../utils/comparePwdCrypt";
-import { IAuthController } from "../interfaces/controllers/auth/IAuthController";
+import { generateRefreshTokenAccess, generateTokenAccess } from "../utils/generateToken.js";
+import { generateCodeTotp } from "../utils/generateCodeTotp.js";
+import comparePwdCrypt from "../utils/comparePwdCrypt.js";
+import { IAuthController } from "../interfaces/controllers/auth/IAuthController.js";
 
 export default class AuthController implements IAuthController {
     private auth_service: AuthService;

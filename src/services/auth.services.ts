@@ -1,10 +1,10 @@
-import { IResponseAuth } from "../interfaces/dtos/auth/IResponseAuth";
-import AuthRepository from "../repository/auth.repository";
-import { ISignup } from "../interfaces/dtos/auth/ISignup";
-import passwordCrypt from "../utils/generatePwdCrypt";
-import { ISignin } from "../interfaces/dtos/auth/ISignin";
+import { IResponseAuth } from "../interfaces/dtos/auth/IResponseAuth.js";
+import AuthRepository from "../repository/auth.repository.js";
+import { ISignup } from "../interfaces/dtos/auth/ISignup.js";
+import passwordCrypt from "../utils/generatePwdCrypt.js";
+import { ISignin } from "../interfaces/dtos/auth/ISignin.js";
 import speakeasy from 'speakeasy';
-import comparePwdCrypt from "../utils/comparePwdCrypt";
+import comparePwdCrypt from "../utils/comparePwdCrypt.js";
 
 export default class AuthService {
     private auth_repository: AuthRepository;

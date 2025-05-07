@@ -4,13 +4,13 @@ import chalk from 'chalk';
 const db = knex({
 
   
-  client: process.env.MYSQL_NAME,
+  client: process.env.MYSQL_NAME || 'mysql2',
   connection: {
-    host: process.env.MYSQL_LOCALHOST,
-    port: Number(process.env.MYSQL_PORT),
-    user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD,
-    database: process.env.MYSQL_DATABASE,
+    host: process.env.MYSQL_LOCALHOST || '127.0.0.1',
+    port: Number(process.env.MYSQL_PORT) || 3306,
+    user: process.env.MYSQL_USER || 'root',
+    password: process.env.MYSQL_PASSWORD || 'Freires2@',
+    database: process.env.MYSQL_DATABASE || 'insightflow',
   },
   pool: { min: 2, max: 10 },
 })

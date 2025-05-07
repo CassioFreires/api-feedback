@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
-import IUsersResponse from "../interfaces/dtos/users/IUsersResponse";
-import UserService from "../services/users.services";
+import IUsersResponse from "../interfaces/dtos/users/IUsersResponse.js";
+import UserService from "../services/users.services.js";
 
 export default class UserController {
     private user_service:UserService;

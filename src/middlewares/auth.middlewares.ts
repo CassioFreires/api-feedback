@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import decodeTokenAuth from '../utils/decodeTokenAuth';
+import decodeTokenAuth from '../utils/decodeTokenAuth.js';
 
 export default class AuthMiddleware {
 

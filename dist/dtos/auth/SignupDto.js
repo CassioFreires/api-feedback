@@ -1,7 +1,8 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SignupDto = void 0;
-class SignupDto {
+export class SignupDto {
+    email;
+    password_hash;
+    name;
+    role;
     constructor(email, password_hash, name, role) {
         this.email = email;
         this.password_hash = password_hash;
@@ -32,4 +33,3 @@ class SignupDto {
         };
     }
 }
-exports.SignupDto = SignupDto;

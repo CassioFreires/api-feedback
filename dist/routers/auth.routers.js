@@ -1,14 +1,9 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = require("express");
+import { Router } from 'express';
 // Controllers
-const auth_controllers_1 = __importDefault(require("../controllers/auth.controllers"));
+import AuthController from '../controllers/auth.controllers.js';
 // Variáveis
-const authRouter = (0, express_1.Router)();
-const auth_controller = new auth_controllers_1.default();
+const authRouter = Router();
+const auth_controller = new AuthController();
 // Rotas
 authRouter.post('/signup', async function (req, res) {
     await auth_controller.signup(req, res);
@@ -31,4 +26,4 @@ authRouter.post('/verify-2fa', async function (req, res) {
 authRouter.post('/disable-2fa', async function (req, res) {
     await auth_controller.disable2fa(req, res);
 });
-exports.default = authRouter;
+export default authRouter;

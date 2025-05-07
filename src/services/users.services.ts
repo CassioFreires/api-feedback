@@ -1,5 +1,5 @@
-import IUsersResponse from "../interfaces/dtos/users/IUsersResponse";
-import UserRepository from "../repository/users.repository";
+import IUsersResponse from "../interfaces/dtos/users/IUsersResponse.js";
+import UserRepository from "../repository/users.repository.js";
 
 
 export default class UserService  {

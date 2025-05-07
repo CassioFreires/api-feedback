@@ -1,24 +1,20 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const auth_services_1 = __importDefault(require("../services/auth.services"));
-const SignupDto_1 = require("../dtos/auth/SignupDto");
-const SigninDto_1 = require("../dtos/auth/SigninDto");
-const chalk_1 = __importDefault(require("chalk"));
-const generateToken_1 = require("../utils/generateToken");
-const generateCodeTotp_1 = require("../utils/generateCodeTotp");
-const comparePwdCrypt_1 = __importDefault(require("../utils/comparePwdCrypt"));
-class AuthController {
+import jwt from 'jsonwebtoken';
+import AuthService from "../services/auth.services.js";
+import { SignupDto } from "../dtos/auth/SignupDto.js";
+import { SigninDto } from "../dtos/auth/SigninDto.js";
+import chalk from "chalk";
+import { generateRefreshTokenAccess, generateTokenAccess } from "../utils/generateToken.js";
+import { generateCodeTotp } from "../utils/generateCodeTotp.js";
+import comparePwdCrypt from "../utils/comparePwdCrypt.js";
+export default class AuthController {
+    auth_service;
     constructor() {
-        this.auth_service = new auth_services_1.default();
+        this.auth_service = new AuthService();
     }
     async signup(req, res) {
         try {
             const { email, password_hash, name, role } = req.body;
-            const newSignupUser = new SignupDto_1.SignupDto(email, password_hash, name, role);
+            const newSignupUser = new SignupDto(email, password_hash, name, role);
             newSignupUser.validate();
             const signupUser = await this.auth_service.signup(newSignupUser);
             if (signupUser) {
@@ -36,13 +32,13 @@ class AuthController {
     async signin(req, res) {
         try {
             const { email, password } = req.body;
-            const newAuth = new SigninDto_1.SigninDto(email, password);
+            const newAuth = new SigninDto(email, password);
             newAuth.validate();
             const auth = await this.auth_service.signin(newAuth);
             if (!auth) {
                 return res.status(404).json({ message: '❌ Error: Usuário ou inválido!', status: 404 });
             }
-            const isValidPassword = await (0, comparePwdCrypt_1.default)(password, auth.data.password_hash);
+            const isValidPassword = await comparePwdCrypt(password, auth.data.password_hash);
             if (!isValidPassword) {
                 console.log('❌: Error: Usuário ou inválido!');
                 return res.status(404).json({ message: '❌ Error: Usuário ou inválido!', status: 404 });
@@ -54,12 +50,12 @@ class AuthController {
                 role_name: auth.data.role_name,
                 description: auth.data.description
             };
-            const token = (0, generateToken_1.generateTokenAccess)(dataToken);
-            const refreshToken = (0, generateToken_1.generateRefreshTokenAccess)(dataToken);
+            const token = generateTokenAccess(dataToken);
+            const refreshToken = generateRefreshTokenAccess(dataToken);
             return res.status(200).json({ message: 'Login OK', status: 200, token: token, refreshToken: refreshToken });
         }
         catch (error) {
-            console.error(chalk_1.default.red('🚨' + error));
+            console.error(chalk.red('🚨' + error));
             return res.status(500).json({ message: '❌: ' + error });
         }
     }
@@ -72,12 +68,12 @@ class AuthController {
             const { refreshToken } = req.body;
             if (!refreshToken)
                 return res.status(401).json({ message: 'Token ausente' });
-            const decoded = jsonwebtoken_1.default.verify(refreshToken, String(process.env.TOKEN_PRIVATE_KEY_REFRESH));
+            const decoded = jwt.verify(refreshToken, String(process.env.TOKEN_PRIVATE_KEY_REFRESH));
             if (!decoded) {
                 return res.status(404).json({ message: "❌: token de refresh inválido" });
             }
             if (typeof decoded === 'object' && 'id' in decoded) {
-                const newAccessToken = (0, generateToken_1.generateTokenAccess)(decoded.id); // OK
+                const newAccessToken = generateTokenAccess(decoded.id); // OK
                 await this.auth_service.saveRefreshToken(Number(decoded.id), String(refreshToken), String(userAgent), String(rawIp), String(proxyIp));
                 return res.json({ accessToken: newAccessToken });
             }
@@ -115,7 +111,7 @@ class AuthController {
             const { auth_id } = req.body;
             if (!auth_id)
                 return res.status(400).json({ message: 'auth_id é obrigatório' });
-            const { secret, qrcode } = await (0, generateCodeTotp_1.generateCodeTotp)();
+            const { secret, qrcode } = await generateCodeTotp();
             const createEnable2fa = await this.auth_service.enable2fa(secret, qrcode, Number(auth_id));
             return res.status(200).json({ message: "✅ Código 2FA gerado", data: createEnable2fa });
         }
@@ -158,4 +154,3 @@ class AuthController {
         }
     }
 }
-exports.default = AuthController;

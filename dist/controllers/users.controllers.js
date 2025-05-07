@@ -1,12 +1,8 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const users_services_1 = __importDefault(require("../services/users.services"));
-class UserController {
+import UserService from "../services/users.services.js";
+export default class UserController {
+    user_service;
     constructor() {
-        this.user_service = new users_services_1.default();
+        this.user_service = new UserService();
     }
     async getUserActive(req, res) {
         try {
@@ -27,4 +23,3 @@ class UserController {
         }
     }
 }
-exports.default = UserController;

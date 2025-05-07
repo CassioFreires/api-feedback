@@ -1,6 +1,6 @@
-import { ISignup } from '../interfaces/dtos/auth/ISignup';
-import db from '../config/db.config';
-import { ISignin } from '../interfaces/dtos/auth/ISignin';
+import { ISignup } from '../interfaces/dtos/auth/ISignup.js';
+import db from '../config/db.config.js';
+import { ISignin } from '../interfaces/dtos/auth/ISignin.js';
 import dayjs from 'dayjs';
 
 export default class AuthRepository {

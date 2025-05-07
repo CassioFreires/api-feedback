@@ -6,12 +6,12 @@ import chalk from 'chalk';
 const app = express();
 env.config();
 
-import { testarConexao } from './config/db.config';
+import { testarConexao } from './config/db.config.js';
 
 
 // rotas
-import authRouter from './routers/auth.routers';
-import usersRouter from './routers/users.routers';
+import authRouter from './routers/auth.routers.js';
+import usersRouter from './routers/users.routers.js';
 
 
 
